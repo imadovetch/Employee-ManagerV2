@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="https://jakarta.ee/xml/ns/jakartaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd"
+         version="6.0">
+    <context-param>
+        <param-name>dbUrl</param-name>
+        <param-value>jdbc:postgresql://localhost:5432/GE</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>dbUser</param-name>
+        <param-value>postgres</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>dbPassword</param-name>
+        <param-value>action</param-value>
+    </context-param>
+
+    <servlet>
+        <servlet-name>EmployeeController</servlet-name>
+        <servlet-class>GE.controller.EmployeeController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>OffreController</servlet-name>
+        <servlet-class>GE.controller.OffreController</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>EmployeeController</servlet-name>
+        <url-pattern>/addEmployee</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>EmployeeController</servlet-name>
+        <url-pattern>/GetEmployee</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>EmployeeController</servlet-name>
+        <url-pattern>/DelEmployee/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>EmployeeController</servlet-name>
+        <url-pattern>/ModifyEmployee/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>EmployeeController</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+<!--    Offre routes-->
+    <servlet-mapping>
+        <servlet-name>OffreController</servlet-name>
+        <url-pattern>/AddOffre</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>OffreController</servlet-name>
+        <url-pattern>/ModifyOffre/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>OffreController</servlet-name>
+        <url-pattern>/DeleteOffre/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>OffreController</servlet-name>
+        <url-pattern>/GetOffres</url-pattern>
+    </servlet-mapping>
+
+
+    <!--    <filter>-->
+<!--        <filter-name>LoggingFilter</filter-name>-->
+<!--        <filter-class>GE.Middleware</filter-class>-->
+<!--    </filter>-->
+
+<!--    <filter-mapping>-->
+<!--        <filter-name>LoggingFilter</filter-name>-->
+<!--        <url-pattern>/*</url-pattern>-->
+<!--    </filter-mapping>-->
+
+</web-app>
