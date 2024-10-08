@@ -4,6 +4,7 @@ import GE.DAO.EmployeeDAO;
 //import GE.model.Employee;
 import com.google.gson.Gson;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -15,7 +16,13 @@ import java.nio.charset.StandardCharsets;
 
 import java.io.IOException;
 import java.util.List;
-
+@WebServlet(urlPatterns = {
+        "/addEmployee",
+        "/GetEmployee",
+        "/DelEmployee/*",
+        "/ModifyEmployee/*",
+        "/"
+})
 public class EmployeeController extends HttpServlet {
 //    private final EmployeeDAO employeeDAO = new EmployeeDAO();
 //

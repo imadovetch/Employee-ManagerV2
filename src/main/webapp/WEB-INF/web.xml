@@ -18,54 +18,7 @@
         <param-value>action</param-value>
     </context-param>
 
-    <servlet>
-        <servlet-name>EmployeeController</servlet-name>
-        <servlet-class>GE.controller.EmployeeController</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>OffreController</servlet-name>
-        <servlet-class>GE.controller.OffreController</servlet-class>
-    </servlet>
 
-    <servlet-mapping>
-        <servlet-name>EmployeeController</servlet-name>
-        <url-pattern>/addEmployee</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
-        <servlet-name>EmployeeController</servlet-name>
-        <url-pattern>/GetEmployee</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>EmployeeController</servlet-name>
-        <url-pattern>/DelEmployee/*</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>EmployeeController</servlet-name>
-        <url-pattern>/ModifyEmployee/*</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>EmployeeController</servlet-name>
-        <url-pattern>/</url-pattern>
-    </servlet-mapping>
-<!--    Offre routes-->
-    <servlet-mapping>
-        <servlet-name>OffreController</servlet-name>
-        <url-pattern>/AddOffre</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>OffreController</servlet-name>
-        <url-pattern>/ModifyOffre/*</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
-        <servlet-name>OffreController</servlet-name>
-        <url-pattern>/DeleteOffre/*</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>OffreController</servlet-name>
-        <url-pattern>/GetOffres</url-pattern>
-    </servlet-mapping>
 
 
     <!--    <filter>-->

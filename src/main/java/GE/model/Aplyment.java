@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "aplyments") // Table name in the database
+@Table(name = "aplyments")
 public class Aplyment {
 
     @Id
@@ -46,7 +46,7 @@ public class Aplyment {
     // Enum for application status
     public enum Status {
         RECUM,      // Received
-        ENCOURS,    // In progress
+        PENDING,    // In progress
         ACCEPTED,   // Accepted
         REJECTED    // Rejected
     }

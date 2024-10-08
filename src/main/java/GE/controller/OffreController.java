@@ -6,6 +6,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -15,7 +16,12 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.time.LocalDate;
 import java.util.List;
-
+@WebServlet(urlPatterns = {
+        "/AddOffre",
+        "/ModifyOffre/*",
+        "/DeleteOffre/*",
+        "/GetOffres"
+})
 public class OffreController extends HttpServlet {
     EmployeeDAO<Offre> offreDAO = new EmployeeDAO<>(Offre.class);
 
