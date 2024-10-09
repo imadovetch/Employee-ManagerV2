@@ -26,6 +26,13 @@ public class Rh extends User {
         return rhSubname;
     }
 
+    @Override
+    public String toString() {
+        return "Rh{" +
+                "rhSubname='" + rhSubname + '\'' +
+                '}';
+    }
+
     public void setRhSubname(String rhSubname) {
         this.rhSubname = rhSubname;
     }

@@ -128,8 +128,8 @@
             type: 'GET',
             url: 'GetOffres', // Corrected URL
             success: function(response) {
-                console.log('Offers fetched successfully!', response);
-                displayOffers(response);
+                console.log('Offers fetched successfully!', JSON.parse(response));
+                displayOffers( JSON.parse(response));
             },
             error: function(error) {
                 console.error('Error fetching offers:', error);

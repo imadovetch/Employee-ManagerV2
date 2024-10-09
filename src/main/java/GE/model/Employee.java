@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "employees") // Define table name in DB
+@Table(name = "employees")
 public class Employee extends User {
 
     @Column(nullable = true)

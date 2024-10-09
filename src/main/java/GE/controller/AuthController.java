@@ -30,24 +30,46 @@ public class AuthController extends HttpServlet {
 
 
     EmployeeDAO<Rh> rhDAO = new EmployeeDAO<>(Rh.class);
+    EmployeeDAO<Employee> EmployeeDAO = new EmployeeDAO<>(Employee.class);
 
     public int register(String email, String name,String Type) {
 
         String password = generateRandomPassword(8);
 
+        if(Type.equals("Employee")){
 
-        Rh newRh = new Rh();
-        newRh.setEmail(email);
-        newRh.setName(name);
-        newRh.setPassword(password);
 
-        try {
-            rhDAO.save(newRh);
-            System.out.println("Rh employee registered successfully.");
-            // Optionally, you can call sendMailWithPass(email, password) here once it's implemented
-        } catch (Exception e) {
-            e.printStackTrace();
-            return -1;
+            Employee newEmployee = new Employee();
+            newEmployee.setEmail(email);
+            newEmployee.setName(name);
+            newEmployee.setPassword(password);
+
+            try {
+                EmployeeDAO.save(newEmployee);
+                System.out.println("imaaaaddd employee registered successfully.");
+                // Optionally, you can call sendMailWithPass(email, password) here once it's implemented
+            } catch (Exception e) {
+                e.printStackTrace();
+                return -1;
+            }
+
+
+        }else if(Type.equals("Rh")){
+
+
+            Rh newRh = new Rh();
+            newRh.setEmail(email);
+            newRh.setName(name);
+            newRh.setPassword(password);
+
+            try {
+                rhDAO.save(newRh);
+                System.out.println("imaaad Rh employee registered successfully.");
+                // Optionally, you can call sendMailWithPass(email, password) here once it's implemented
+            } catch (Exception e) {
+                e.printStackTrace();
+                return -1;
+            }
         }
 
         return 0;
@@ -75,21 +97,28 @@ public class AuthController extends HttpServlet {
         EmployeeDAO<Employee> employeeDAO = new EmployeeDAO<>(Employee.class);
         EmployeeDAO<Rh> rhDAO = new EmployeeDAO<>(Rh.class);
 
-        // Check for Employee
-        Employee employee = employeeDAO.findByEmail(email);
-        out.write(employee.toString());
-        out.write(employeeDAO.fetchAll().toString());
-        if (employee != null && employee.getPassword().equals(password)) {
-            // Login successful, return employee ID and type
-            out.write("{\"id\": " + employee.getId() + ", \"type\": \"Employee\"}");
-            return;
-        }
+        try {
+            Employee employee = employeeDAO.findByEmail(email,"Employee");
 
-        // Check for Rh
-        Rh rh = rhDAO.findByEmail(email);
-        if (rh != null && rh.getPassword().equals(password)) {
-            // Login successful, return Rh ID and type
-            out.write("{\"id\": " + rh.getId() + ", \"type\": \"Rh\"}");
+
+            if (employee != null && employee.getPassword().equals(password)) {
+                out.write("{\"id\": " + employee.getId() + ", \"type\": \"Employee\"}");
+                return;
+            }
+
+            Rh rh = rhDAO.findByEmail(email,"Rh");
+            System.out.println(rh.toString());
+            if (rh != null && rh.getPassword().equals(password)) {
+
+                out.write("{\"id\": " + rh.getId() + ", \"type\": \"Rh\"}");
+                return;
+            }
+
+        } catch (Exception e) {
+            // Handle any exceptions that occur during the login process
+            e.printStackTrace();
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            out.write("{\"message\": \"An error occurred while processing your request.\"}");
             return;
         }
 

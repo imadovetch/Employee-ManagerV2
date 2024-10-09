@@ -1,13 +1,5 @@
-body {
-    align-items: center;
-    background-color: #000;
-    display: flex;
-    justify-content: center;
-    height: 100vh;
-}
-.FullPage{
-    height: 100vh;
-    width: 100%;
+html {
 
-    background: red;
+    background-color: #0000;
+    display:none;
 }

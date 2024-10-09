@@ -1,9 +1,6 @@
 package GE.DAO;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.EntityTransaction;
-import jakarta.persistence.Persistence;
+import jakarta.persistence.*;
 
 import java.util.List;
 
@@ -143,13 +140,21 @@ public class EmployeeDAO<T> {
 
         return entity;
     }
-    public T findByEmail(String email) {
+    public T findByEmail(String email,String name) {
         EntityManager entityManager = null;
         T entity = null;
 
         try {
             entityManager = entityManagerFactory.createEntityManager();
-            entity = entityManager.find(entityClass, email);
+
+            String queryString = "SELECT e FROM " + name + " e WHERE e.email = :email";
+            TypedQuery<T> query = entityManager.createQuery(queryString, entityClass);
+            query.setParameter("email", email);
+
+            entity = query.getSingleResult();
+        } catch (NoResultException e) {
+
+            System.out.println("No entity found with email: " + email);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -160,4 +165,5 @@ public class EmployeeDAO<T> {
 
         return entity;
     }
+
 }

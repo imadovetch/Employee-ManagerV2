@@ -110,7 +110,8 @@ public class AplymentController extends HttpServlet {
                     if (aplymentToUpdate.getStatus() == Aplyment.Status.ACCEPTED) {
                         EmployeeDAO<Offre> OffreDAO = new EmployeeDAO<>(Offre.class);
 
-                        new AuthController().register(aplymentToUpdate.getEmail(), aplymentToUpdate.getName(), OffreDAO.findById(aplymentToUpdate.getOffreId()).getType()); // mn b3d khdem b bean
+                       new AuthController().register(aplymentToUpdate.getEmail(), aplymentToUpdate.getName(), OffreDAO.findById(aplymentToUpdate.getOffreId()).getType()); // mn b3d khdem b bean
+
                     }
                 } else {
                     ResponseHandler.sendResponse(response, "Aplyment not found.", HttpServletResponse.SC_NOT_FOUND);
