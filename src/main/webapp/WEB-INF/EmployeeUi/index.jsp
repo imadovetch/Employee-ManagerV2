@@ -7,24 +7,19 @@
 <body>
 <div class="Rhnavbar">
     <div onclick="SetPage(1)">
-        Create Offer
+        ModifyProfile
     </div>
     <div onclick="SetPage(2)">
         Manage Offers
     </div>
-    <div onclick="SetPage(3)">
-        Monitoring
-    </div>
+
 </div>
 <section id="Container" class="content-section">
-    <div id="create" class="Hidden">
-        <jsp:include page="/WEB-INF/RhUi/CreateOffre.jsp" />
+    <div id="DefaultEmployee" class="Hidden">
+        <jsp:include page="/WEB-INF/EmployeeUi/DefaultEmployee.jsp" />
     </div>
-    <div id="manage" class="Hidden">
-        <jsp:include page="/WEB-INF/RhUi/ManageApplyments.jsp" />
-    </div>
-    <div id="monitoring" class="Hidden">
-        <jsp:include page="/WEB-INF/RhUi/Monitoring.jsp" />
+    <div id="modifprofil" class="Hidden">
+        <jsp:include page="/WEB-INF/EmployeeUi/modifyProfil.jsp" />
     </div>
 </section>
 </body>
@@ -65,17 +60,14 @@
 <script>
     function SetPage(number) {
         // Hide all sections by default
-        $('#create').addClass('Hidden').removeClass('Visible');
-        $('#manage').addClass('Hidden').removeClass('Visible');
-        $('#monitoring').addClass('Hidden').removeClass('Visible');
+        $('#modifprofil').addClass('Hidden').removeClass('Visible');
+
 
         // Show the relevant section based on the number
         if (number === 1) {
-            $('#create').removeClass('Hidden').addClass('Visible');
+            $('#modifprofil').removeClass('Hidden').addClass('Visible');
         } else if (number === 2) {
             $('#manage').removeClass('Hidden').addClass('Visible');
-        } else if (number === 3) {
-            $('#monitoring').removeClass('Hidden').addClass('Visible');
         }
     }
 </script>

@@ -17,14 +17,14 @@
     </div>
 </div>
 <section id="Container" class="content-section">
-    <div id="create" class="Hidden">
-        <jsp:include page="/WEB-INF/RhUi/CreateOffre.jsp" />
-    </div>
+<%--    <div id="create" class="Hidden">--%>
+<%--        <jsp:include page="/WEB-INF/AdminUi/" />--%>
+<%--    </div>--%>
     <div id="manage" class="Hidden">
-        <jsp:include page="/WEB-INF/RhUi/ManageApplyments.jsp" />
+        <jsp:include page="/WEB-INF/AdminUi/ManageEnployee.jsp" />
     </div>
     <div id="monitoring" class="Hidden">
-        <jsp:include page="/WEB-INF/RhUi/Monitoring.jsp" />
+        <jsp:include page="/WEB-INF/AdminUi/Logs.jsp" />
     </div>
 </section>
 </body>

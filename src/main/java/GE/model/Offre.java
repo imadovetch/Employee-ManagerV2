@@ -13,6 +13,7 @@ public class Offre {
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto-generated primary key
     private Long id;
 
+
     // Type of the offer (e.g., full-time, part-time)
     @Column(name = "description", nullable = false)
     private String description;
