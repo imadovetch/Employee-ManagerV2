@@ -20,8 +20,8 @@
 
         <label for="jobType">Job Type:</label>
         <select id="jobType" name="jobType">
-            <option value="Full-time">Full-time</option>
-            <option value="Part-time">Part-time</option>
+            <option value="Rh">Rh</option>
+            <option value="Employee">Part-time</option>
         </select><br><br>
 
         <label for="status">Status:</label>

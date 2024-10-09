@@ -29,6 +29,8 @@ public class OffreController extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
 
+        Long RequestSender = 1L;
+
         String description = request.getParameter("description");
         String jobType = request.getParameter("jobType");
         String statusStr = request.getParameter("status");
@@ -44,7 +46,7 @@ public class OffreController extends HttpServlet {
         try {
             Offre.Status status = Offre.Status.valueOf(statusStr.toUpperCase());
 
-            Offre newOffre = new Offre(LocalDate.now(), jobType, status, description);
+            Offre newOffre = new Offre(RequestSender,LocalDate.now(), jobType, status, description);
 
             offreDAO.save(newOffre);
 

@@ -21,12 +21,11 @@ import java.util.List;
         "/GetEmployee",
         "/DelEmployee/*",
         "/ModifyEmployee/*",
-        "/"
 })
 public class EmployeeController extends HttpServlet {
 //    private final EmployeeDAO employeeDAO = new EmployeeDAO();
 //
-    @Override
+//    @Override
 //    protected void doGet(HttpServletRequest request, HttpServletResponse response)
 //            throws ServletException, IOException {
 //
@@ -45,13 +44,6 @@ public class EmployeeController extends HttpServlet {
 //            response.getWriter().write("No employees found.");
 //        }
 //    }
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-
-
-            request.getRequestDispatcher("Home.jsp").forward(request, response);
-
-    }
 
 //
 //

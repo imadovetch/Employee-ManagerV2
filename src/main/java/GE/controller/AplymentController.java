@@ -2,6 +2,7 @@ package GE.controller;
 
 import GE.DAO.EmployeeDAO;
 import GE.model.Aplyment;
+import GE.model.Offre;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
@@ -100,9 +101,17 @@ public class AplymentController extends HttpServlet {
                 long id = Long.parseLong(idStr);
                 Aplyment aplymentToUpdate = aplymentDAO.findById(id);
                 if (aplymentToUpdate != null) {
-                    aplymentToUpdate.setStatus(Aplyment.Status.valueOf(statusStr.toUpperCase())); // Update status
+                    Aplyment.Status newStatus = Aplyment.Status.valueOf(statusStr.toUpperCase());
+                    aplymentToUpdate.setStatus(newStatus);
                     aplymentDAO.update(aplymentToUpdate, id);
                     ResponseHandler.sendResponse(response, "Aplyment updated successfully.", HttpServletResponse.SC_OK);
+
+
+                    if (aplymentToUpdate.getStatus() == Aplyment.Status.ACCEPTED) {
+                        EmployeeDAO<Offre> OffreDAO = new EmployeeDAO<>(Offre.class);
+
+                        new AuthController().register(aplymentToUpdate.getEmail(), aplymentToUpdate.getName(), OffreDAO.findById(aplymentToUpdate.getOffreId()).getType()); // mn b3d khdem b bean
+                    }
                 } else {
                     ResponseHandler.sendResponse(response, "Aplyment not found.", HttpServletResponse.SC_NOT_FOUND);
                 }

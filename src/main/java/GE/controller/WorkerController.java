@@ -2,33 +2,14 @@ package GE.controller;
 
 import GE.DAO.EmployeeDAO;
 import GE.model.Rh;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 
-import java.io.IOException;
 import java.security.SecureRandom;
 import java.util.Random;
-@WebServlet(urlPatterns = {
-        "/",
-})
-public class AuthController extends HttpServlet {
 
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-
-
-        request.getRequestDispatcher("WEB-INF/RhUi/index.jsp").forward(request, response);
-
-    }
-
-
+public class WorkerController {
     EmployeeDAO<Rh> rhDAO = new EmployeeDAO<>(Rh.class);
 
-    public int register(String email, String name,String Type) {
+    public int register(String email, String name) {
 
         String password = generateRandomPassword(8);
 
@@ -44,10 +25,10 @@ public class AuthController extends HttpServlet {
             // Optionally, you can call sendMailWithPass(email, password) here once it's implemented
         } catch (Exception e) {
             e.printStackTrace();
-            return -1;
+            return -1; // Registration failed
         }
 
-        return 0;
+        return 0;  // Registration successful
     }
 
 
@@ -63,8 +44,9 @@ public class AuthController extends HttpServlet {
         return password.toString();
     }
 
-
+    // Placeholder method for sending the mail (skipping for now)
     public void sendMailWithPass(String email, String password) {
-
+        // Logic for sending email with password will go here in the future
+        // Skip for now
     }
 }

@@ -40,12 +40,15 @@ public class Offre {
     public Offre() {
     }
 
-    public Offre(LocalDate publicationDate, String type, Status status,String description) {
+    public Offre(Long Creatorid,LocalDate publicationDate, String type, Status status,String description) {
+        this.Creatorid = Creatorid;
         this.description = description;
         this.publicationDate = publicationDate;
         this.type = type;
         this.status = status;
     }
+    @Column(name = "Creatorid", nullable = false)
+    private Long Creatorid;
 
     // Getters and setters
     public Long getId() {
@@ -55,7 +58,13 @@ public class Offre {
     public void setId(Long id) {
         this.id = id;
     }
+    public Long getCreatorid() {
+        return Creatorid;
+    }
 
+    public void setCreatorid(Long id) {
+        this.Creatorid = Creatorid;
+    }
     public LocalDate getPublicationDate() {
         return publicationDate;
     }
