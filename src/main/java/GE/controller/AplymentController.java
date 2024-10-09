@@ -8,14 +8,18 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.Part;
 import utils.ResponseHandler;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.List;
 @WebServlet(urlPatterns = {
@@ -24,45 +28,55 @@ import java.util.List;
         "/GetAplyments"
 })
 
+
+@MultipartConfig(
+        fileSizeThreshold = 1024 * 1024, // 1MB
+        maxFileSize = 1024 * 1024 * 10,  // 10MB
+        maxRequestSize = 1024 * 1024 * 50 // 50MB
+)
 public class AplymentController extends HttpServlet {
     EmployeeDAO<Aplyment> aplymentDAO = new EmployeeDAO<>(Aplyment.class);
 
     @Override
-    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
 
-        StringBuilder sb = new StringBuilder();
-        String line;
-        BufferedReader br = new BufferedReader(new InputStreamReader(request.getInputStream()));
-
         try {
-            while ((line = br.readLine()) != null) {
-                sb.append(line);
+            // Get the file part (cv)
+            Part cvPart = request.getPart("cv");
+            String cvFileName = Paths.get(cvPart.getSubmittedFileName()).getFileName().toString();
+
+            // Define the folder where CVs will be saved
+            String uploadPath = getServletContext().getRealPath("") + File.separator + "uploads";
+            File uploadDir = new File(uploadPath);
+            if (!uploadDir.exists()) {
+                uploadDir.mkdir(); // Create the uploads directory if it doesn't exist
             }
 
-            String jsonData = sb.toString();
-            JsonObject jsonObject = JsonParser.parseString(jsonData).getAsJsonObject();
+            // Save the uploaded CV to the server
+            String cvFilePath = uploadPath + File.separator + cvFileName;
+            cvPart.write(cvFilePath); // This saves the file
 
-            Long offreId = jsonObject.get("offreId").getAsLong();
-            String name = jsonObject.get("name").getAsString();
-            String email = jsonObject.get("email").getAsString();
-            Aplyment.Status status = Aplyment.Status.valueOf(jsonObject.get("status").getAsString().toUpperCase());
-            LocalDate applyDate = LocalDate.now(); // Set current date as apply date
+            // Get other form fields
+            String name = request.getParameter("name");
+            String email = request.getParameter("email");
+            String lettremotivation = request.getParameter("lettremotivation");
+            Long offreId = Long.parseLong(request.getParameter("offreId"));
+            Aplyment.Status status = Aplyment.Status.valueOf(request.getParameter("status").toUpperCase());
+            LocalDate applyDate = LocalDate.now();
 
-            Aplyment newAplyment = new Aplyment(offreId, name, email, status, applyDate);
+            // Create the new Aplyment object
+            Aplyment newAplyment = new Aplyment(offreId, name, email, status, applyDate, cvFilePath, lettremotivation);
+
+            // Save the new application
             aplymentDAO.save(newAplyment);
 
+            // Send a success response
             ResponseHandler.sendResponse(response, newAplyment.toString(), HttpServletResponse.SC_CREATED);
-        } catch (IllegalArgumentException e) {
-            ResponseHandler.sendResponse(response, "Invalid input data: " + e.getMessage(), HttpServletResponse.SC_BAD_REQUEST);
-        } catch (JsonParseException e) {
-            ResponseHandler.sendResponse(response, "Error parsing JSON data: " + e.getMessage(), HttpServletResponse.SC_BAD_REQUEST);
         } catch (Exception e) {
-            // Catch any other exceptions and log the error message
-            ResponseHandler.sendResponse(response, "An error occurred: " + e.getMessage(), HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            e.printStackTrace(); // Optional: log the stack trace for debugging purposes
-        } finally {
-            br.close(); // Close the BufferedReader
+            // Handle file upload and parsing errors
+            ResponseHandler.sendResponse(response, "Error: " + e.getMessage(), HttpServletResponse.SC_BAD_REQUEST);
+            e.printStackTrace();
         }
     }
 

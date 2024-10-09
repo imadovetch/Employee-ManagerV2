@@ -25,12 +25,27 @@ public class Aplyment {
     @Column(name = "status", nullable = false)
     private Status status;
 
+    public String getCvpath() {
+        return cvpath;
+    }
+
+    public void setCvpath(String cvpath) {
+        this.cvpath = cvpath;
+    }
+
     @Column(name = "apply_date", nullable = false)
     private LocalDate applyDate;
 
+    @Column(name = "cvpath", nullable = false)
+    private String cvpath;
 
-    public Aplyment( Long offreId, String name, String email, Status status, LocalDate applyDate) {
+    @Column(name = "lettremotivation", nullable = false)
+    private String lettremotivation;
 
+
+    public Aplyment( Long offreId, String name, String email, Status status, LocalDate applyDate,String cvpath , String lettremotivation) {
+        this.lettremotivation = lettremotivation;
+        this.cvpath = cvpath;
         this.offreId = offreId;
         this.name = name;
         this.email = email;
