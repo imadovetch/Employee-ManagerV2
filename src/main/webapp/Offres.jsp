@@ -8,15 +8,15 @@
 </head>
 <body style="display: flex; flex-direction: column;" class="light">
 <div style="height: 10% ; width: 100%; display: flex; justify-content: end; align-items: center ">
-<%--    <div>--%>
-<%--        <!-- Search and filter functionality -->--%>
-<%--        <input type="text" id="searchInput" placeholder="Search by description" oninput="filterOffers()">--%>
-<%--        <select id="typeFilter" onchange="filterOffers()">--%>
-<%--            <option value="">All</option>--%>
-<%--            <option value="Rh">Rh</option>--%>
-<%--            <option value="Employee">Employee</option>--%>
-<%--        </select>--%>
-<%--    </div>--%>
+    <div style="display: flex ; justify-content: space-around ; align-items: center ; width: 60%; margin-left: auto;">
+
+        <input placeholder="Searth the internet..." type="text" name="text" class="searchinput">
+        <select id="typeFilter" onchange="filterOffers()">
+            <option value="">All</option>
+            <option value="Rh">Rh</option>
+            <option value="Employee">Employee</option>
+        </select>
+    </div>
     <label class="switch" style="margin: 20px">
         <input type="checkbox" id="themeToggle">
         <span class="slider"></span>
@@ -211,6 +211,32 @@
         -2px -2px 5px rgba(255, 255, 255, 0.9); /* Darker shadow on hover */
     }
 
+
+    /* From Uiverse.io by ErzenXz */
+    .searchinput{
+        width: 100%;
+        max-width: 220px;
+        height: 36px;
+        padding: 12px;
+        border-radius: 12px;
+        border: 1.5px solid lightgrey;
+        outline: none;
+        transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+        box-shadow: 0px 0px 20px -18px;
+    }
+
+    .searchinput:hover {
+        border: 2px solid lightgrey;
+        box-shadow: 0px 0px 20px -17px;
+    }
+
+    .searchinput:active {
+        transform: scale(0.95);
+    }
+
+    .searchinput:focus {
+        border: 2px solid grey;
+    }
 </style>
 <script>
     var OffresForpage = getOffers();
