@@ -143,4 +143,21 @@ public class EmployeeDAO<T> {
 
         return entity;
     }
+    public T findByEmail(String email) {
+        EntityManager entityManager = null;
+        T entity = null;
+
+        try {
+            entityManager = entityManagerFactory.createEntityManager();
+            entity = entityManager.find(entityClass, email);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (entityManager != null) {
+                entityManager.close();
+            }
+        }
+
+        return entity;
+    }
 }

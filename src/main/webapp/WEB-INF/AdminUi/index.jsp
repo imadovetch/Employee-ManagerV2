@@ -1,25 +1,20 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
-<head>
-    <title>Rh Management</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-</head>
+
 <body>
 <div class="Rhnavbar">
     <div onclick="SetPage(1)">
-        Create Offer
+        cONGE
     </div>
     <div onclick="SetPage(2)">
-        Manage Offers
+        Manageempl
     </div>
     <div onclick="SetPage(3)">
-        Monitoring
+        Logs
     </div>
 </div>
 <section id="Container" class="content-section">
-<%--    <div id="create" class="Hidden">--%>
-<%--        <jsp:include page="/WEB-INF/AdminUi/" />--%>
-<%--    </div>--%>
+    <div id="create" class="Hidden">
+        <jsp:include page="/WEB-INF/AdminUi/Conge&Absence.jsp" />
+    </div>
     <div id="manage" class="Hidden">
         <jsp:include page="/WEB-INF/AdminUi/ManageEnployee.jsp" />
     </div>
@@ -28,7 +23,7 @@
     </div>
 </section>
 </body>
-</html>
+
 
 <style>
     .Rhnavbar {

@@ -1,9 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
-<head>
-    <title>Rh Management</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-</head>
+
 <body>
 <div class="Rhnavbar">
     <div onclick="SetPage(1)">
@@ -23,7 +18,7 @@
     </div>
 </section>
 </body>
-</html>
+
 
 <style>
     .Rhnavbar {
