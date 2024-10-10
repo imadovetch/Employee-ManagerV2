@@ -1,17 +1,8 @@
 
-<body>
-<div class="Rhnavbar">
-    <div onclick="SetPage(1)">
-        Create Offer
-    </div>
-    <div onclick="SetPage(2)">
-        Manage Offers
-    </div>
-    <div onclick="SetPage(3)">
-        Monitoring
-    </div>
-</div>
-<section id="Container" class="content-section">
+<div   style="height: 90% ; width: 100%; margin: auto; display: flex;  justify-content: space-around;  align-items: center; " >
+
+
+<section  class="content-section">
     <div id="create" class="Hidden">
         <jsp:include page="/WEB-INF/RhUi/CreateOffre.jsp" />
     </div>
@@ -22,8 +13,8 @@
         <jsp:include page="/WEB-INF/RhUi/Monitoring.jsp" />
     </div>
 </section>
-</body>
 
+</div>
 
 <style>
     .Rhnavbar {
@@ -45,9 +36,7 @@
     .content-section {
         width: 100%;
         height: 100%;
-        background-color: #007bff;
-        margin-top: 50px;
-        padding: 20px;
+
     }
     .Hidden {
         display: none;

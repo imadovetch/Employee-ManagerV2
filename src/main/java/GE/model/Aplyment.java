@@ -39,6 +39,14 @@ public class Aplyment {
     @Column(name = "cvpath", nullable = false)
     private String cvpath;
 
+    public String getLettremotivation() {
+        return lettremotivation;
+    }
+
+    public void setLettremotivation(String lettremotivation) {
+        this.lettremotivation = lettremotivation;
+    }
+
     @Column(name = "lettremotivation", nullable = false)
     private String lettremotivation;
 

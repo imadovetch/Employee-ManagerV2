@@ -6,7 +6,8 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<section>
+
+<section class="container">
     <div class="FullPage">
         <div class="Navbar">
             <h1 class="title">Job Application Management</h1>
@@ -29,10 +30,80 @@
 
         <div id="resultsAply"></div>
     </div>
+    <table class="applicant-table">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Motivation Letter</th>
+            <th>CV</th>
+            <th>Apply Date</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
 
-
-
+        </tbody>
+    </table>
 </section>
+
+<style>
+    .container {
+        width: 90%;
+        margin: 50px auto;
+        border-radius: 15px;
+        padding: 20px;
+        background-color: #f7f7f7;
+        box-shadow: 20px 20px 60px #bebebe, -20px -20px 60px #ffffff;
+    }
+
+    .applicant-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+    .applicant-table th, .applicant-table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: center;
+    }
+
+    .applicant-table th {
+        background-color: #4CAF50;
+        color: white;
+    }
+
+    .applicant-table tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+
+    .accept-btn, .reject-btn {
+        padding: 8px 12px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .accept-btn {
+        background-color: #28a745;
+        color: white;
+    }
+
+    .reject-btn {
+        background-color: #dc3545;
+        color: white;
+    }
+
+    .accept-btn:hover {
+        background-color: #218838;
+    }
+
+    .reject-btn:hover {
+        background-color: #c82333;
+    }
+</style>
+
 <script>
     $(document).ready(function() {
         $('#Applymentform').submit(function(event) {
@@ -64,7 +135,7 @@
             data: JSON.stringify(formData),
             success: function(response) {
                 console.log('Application added successfully!', response);
-                alert('Application added: ' + response);
+
                 clearForm();
             },
             error: function(error) {
@@ -74,9 +145,7 @@
         });
     }
 
-    function modifyApplication() {
-        var offerId = $('#offerIdAply').val(); // Using Offer ID to find application
-        var status = prompt("Enter new status for the application (e.g., ACCEPTED, REJECTED):");
+    function modifyApplication(offerId,status) {
 
         if (status) {
             $.ajax({
@@ -86,7 +155,8 @@
                 data: JSON.stringify({ status: status }),
                 success: function(response) {
                     console.log('Application modified successfully!', response);
-                    alert('Application modified: ' + response);
+                    GLOBBALAPPLYMENTS = GLOBBALAPPLYMENTS.filter(e => e.id != offerId);
+                    displayApplications(GLOBBALAPPLYMENTS)
                 },
                 error: function(error) {
                     console.error('Error modifying application:', error);
@@ -97,14 +167,16 @@
             alert('Status cannot be empty.');
         }
     }
-
+    var GLOBBALAPPLYMENTS;
     function getApplications() {
         $.ajax({
             type: 'GET',
-            url: 'GetAplyments', // Adjust this URL if necessary
+            url: 'GetAplyments',
             success: function(response) {
-                console.log('Applications fetched successfully!', response);
-                displayApplications(JSON.parse(response)); // Assuming response is a JSON array
+                console.log('Applications fetched succesly!', response);
+                GLOBBALAPPLYMENTS =  response;
+                displayApplications(response);
+
             },
             error: function(error) {
                 console.error('Error fetching applications:', error);
@@ -112,15 +184,27 @@
             }
         });
     }
-
-    function displayApplications(applications) {
-        var resultsDiv = $('#resultsAply');
-        resultsDiv.empty(); // Clear previous results
-
-        applications.forEach(function(application) {
-            resultsDiv.append(`<div><strong>${application.name}</strong> - Email: ${application.email}, Status: ${application.status}, Offer ID: ${application.offreId}</div>`);
+    function displayApplications(data) {
+        let tableBody = '';
+        console.log(data.name );
+        data.forEach(function(data) {
+            tableBody +=
+                '<tr>' +
+                '<td>' + data.name + '</td>' +
+                '<td>' + data.email + '</td>' +
+                '<td>' + data.Letter + '</td>' +
+                '<td><a href="' + data.Cvpath + '">Download CV</a></td>' +
+                '<td>' + data.applyDate + '</td>' +
+                '<td>' +
+                '<button class="accept-btn" onclick="modifyApplication(' + data.id + ', \'ACCEPTED\')">Accept</button>' +
+                '<button class="reject-btn" onclick="modifyApplication(' + data.id + ', \'REJECTED\')">Reject</button>' +
+                '</td>' +
+                '</tr>';
         });
+
+        document.querySelector(".applicant-table tbody").innerHTML = tableBody;
     }
+
 
     function clearForm() {
         $('#applicantName').val('');

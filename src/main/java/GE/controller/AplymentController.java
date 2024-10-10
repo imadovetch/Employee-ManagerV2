@@ -3,10 +3,8 @@ package GE.controller;
 import GE.DAO.EmployeeDAO;
 import GE.model.Aplyment;
 import GE.model.Offre;
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
-import com.google.gson.JsonParser;
+import GE.model.Rh;
+import com.google.gson.*;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
@@ -14,6 +12,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Part;
+import utils.LocalDateAdapter;
 import utils.ResponseHandler;
 import java.io.BufferedReader;
 import java.io.File;
@@ -21,7 +20,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.Paths;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 @WebServlet(urlPatterns = {
         "/AddAplyment",
         "/ModifyAplyment/*",
@@ -146,28 +149,68 @@ public class AplymentController extends HttpServlet {
     }
 
 
+
+
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String idStr = request.getParameter("id"); // Optional: to fetch a specific aplyment
+        request.setCharacterEncoding("UTF-8");
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
 
-        if (idStr == null || idStr.trim().isEmpty()) {
-            List<Aplyment> aplyments = aplymentDAO.fetchAll();
-            ResponseHandler.sendResponse(response, aplyments.toString(), HttpServletResponse.SC_OK);
-        } else {
-            try {
-                long id = Long.parseLong(idStr);
-                Aplyment aplyment = aplymentDAO.findById(id); // Fetch an aplyment by ID
+        try {
+            // Base URL for the uploaded files
+            String baseUrl = request.getContextPath() + "/uploads/";
 
-                if (aplyment != null) {
-                    ResponseHandler.sendResponse(response, aplyment.toString(), HttpServletResponse.SC_OK);
-                } else {
-                    ResponseHandler.sendResponse(response, "Aplyment not found.", HttpServletResponse.SC_NOT_FOUND);
+            // Fetch all aplyments
+
+            List<Aplyment> aplyments = aplymentDAO.fetchWhere("status", "PENDING");
+
+            System.out.println(aplyments);
+
+            // Manually create JSON response
+            StringBuilder jsonResponse = new StringBuilder("[");
+            for (int i = 0; i < aplyments.size(); i++) {
+                Aplyment aplyment = aplyments.get(i);
+
+                // Replace the local path with a URL-accessible path
+                String cvUrl = baseUrl + new File(aplyment.getCvpath()).getName();
+
+                jsonResponse.append("{")
+                        .append("\"id\":").append(aplyment.getId()).append(",")
+                        .append("\"offreId\":").append(aplyment.getOffreId()).append(",")
+                        .append("\"name\":\"").append(aplyment.getName()).append("\",")
+                        .append("\"email\":\"").append(aplyment.getEmail()).append("\",")
+                        .append("\"status\":\"").append(aplyment.getStatus()).append("\",")
+                        .append("\"applyDate\":\"").append(aplyment.getApplyDate()).append("\",")
+                        .append("\"cvUrl\":\"").append(cvUrl).append("\",")  // Use the new cvUrl
+                        .append("\"Letter\":\"").append(aplyment.getLettremotivation()).append("\"")
+                        .append("}");
+
+                if (i < aplyments.size() - 1) {
+                    jsonResponse.append(",");
                 }
-            } catch (NumberFormatException e) {
-                ResponseHandler.sendResponse(response, "Invalid ID format.", HttpServletResponse.SC_BAD_REQUEST);
             }
+            jsonResponse.append("]");
+
+            // Write the response directly
+            response.getWriter().write(jsonResponse.toString());
+
+            // Set status to 200 (OK)
+            response.setStatus(HttpServletResponse.SC_OK);
+        } catch (Exception e) {
+            // Log the exception
+            e.printStackTrace();
+
+            // Send an error response with status 500 (Internal Server Error)
+            response.getWriter().write("{\"error\": \"Internal Server Error. Unable to process the request.\"}");
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
+
+
+
+
+
 }
 
 

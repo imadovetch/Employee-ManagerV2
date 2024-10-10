@@ -1,5 +1,6 @@
 package GE.DAO;
 
+import GE.model.Aplyment;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -45,6 +46,37 @@ public class EmployeeDAO<T> {
         try {
             entityManager = entityManagerFactory.createEntityManager();
             entities = entityManager.createQuery("from " + entityClass.getSimpleName(), entityClass).getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (entityManager != null) {
+                entityManager.close();
+            }
+        }
+
+        return entities;
+    }
+
+    public List<T> fetchWhere(String fieldName, String value) {
+        EntityManager entityManager = null;
+        List<T> entities = null;
+
+        try {
+            entityManager = entityManagerFactory.createEntityManager();
+            String queryStr = "FROM " + entityClass.getSimpleName() + " WHERE " + fieldName + " = :value";
+            var query = entityManager.createQuery(queryStr, entityClass);
+
+            // Check if the field is "status" and convert the value to the enum type if necessary
+            if ("status".equals(fieldName)) {
+                // Convert String to Enum
+                Aplyment.Status statusValue = Aplyment.Status.valueOf(value);
+                query.setParameter("value", statusValue);
+            } else {
+                // Handle other fields
+                query.setParameter("value", value);
+            }
+
+            entities = query.getResultList();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
