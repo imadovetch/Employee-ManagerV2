@@ -31,6 +31,8 @@ public class Offre {
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
     private Status status;
+    @Column(name = "Creatorid", nullable = false)
+    private Long Creatorid;
 
     // Enum to define status options: live or ended
     public enum Status {
@@ -48,8 +50,6 @@ public class Offre {
         this.type = type;
         this.status = status;
     }
-    @Column(name = "Creatorid", nullable = false)
-    private Long Creatorid;
 
     // Getters and setters
     public Long getId() {

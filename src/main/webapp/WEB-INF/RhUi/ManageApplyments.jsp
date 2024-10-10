@@ -6,30 +6,11 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
+<div onclick="getApplications()">refreach</div>
 <section class="container">
-    <div class="FullPage">
-        <div class="Navbar">
-            <h1 class="title">Job Application Management</h1>
-        </div>
 
-        <form id="Applymentform">
-            <label for="applicantName">Applicant Name:</label>
-            <input type="text" id="applicantName" name="applicantName" required><br><br>
 
-            <label for="applicantEmail">Applicant Email:</label>
-            <input type="email" id="applicantEmail" name="applicantEmail" required><br><br>
-
-            <label for="offerIdAply">Offer ID:</label>
-            <input type="text" id="offerIdAply" name="offerIdAply" placeholder="Enter Offer ID for Application" required><br><br>
-
-            <button type="submit" id="addButtonAply">Add Application</button>
-            <button type="button" id="modifyButtonAply">Modify Application</button>
-            <button type="button" id="getButtonAply">Get Applications</button>
-        </form>
-
-        <div id="resultsAply"></div>
-    </div>
     <table class="applicant-table">
         <thead>
         <tr>
@@ -46,7 +27,9 @@
         </tbody>
     </table>
 </section>
-
+<%--<div id="pdfCanvasContainer" >--%>
+<%--    <canvas id="pdfCanvas"></canvas>--%>
+<%--</div>--%>
 <style>
     .container {
         width: 90%;
@@ -81,6 +64,7 @@
     .accept-btn, .reject-btn {
         padding: 8px 12px;
         border: none;
+        margin: 4px;
         border-radius: 5px;
         cursor: pointer;
     }
@@ -105,45 +89,8 @@
 </style>
 
 <script>
-    $(document).ready(function() {
-        $('#Applymentform').submit(function(event) {
-            event.preventDefault();
-            addApplication();
-        });
 
-        $('#modifyButtonAply').click(function() {
-            modifyApplication();
-        });
 
-        $('#getButtonAply').click(function() {
-            getApplications();
-        });
-    });
-
-    function addApplication() {
-        var formData = {
-            name: $('#applicantName').val(),
-            email: $('#applicantEmail').val(),
-            offreId: $('#offerIdAply').val(),
-            status: 'PENDING' // Default status for new applications
-        };
-
-        $.ajax({
-            type: 'POST',
-            url: 'AddAplyment',
-            contentType: 'application/json',
-            data: JSON.stringify(formData),
-            success: function(response) {
-                console.log('Application added successfully!', response);
-
-                clearForm();
-            },
-            error: function(error) {
-                console.error('Error adding application:', error);
-                alert('Error adding application: ' + error.responseText);
-            }
-        });
-    }
 
     function modifyApplication(offerId,status) {
 
@@ -168,6 +115,7 @@
         }
     }
     var GLOBBALAPPLYMENTS;
+    getApplications();
     function getApplications() {
         $.ajax({
             type: 'GET',
@@ -193,9 +141,9 @@
                 '<td>' + data.name + '</td>' +
                 '<td>' + data.email + '</td>' +
                 '<td>' + data.Letter + '</td>' +
-                '<td><a href="' + data.Cvpath + '">Download CV</a></td>' +
+                '<td> <div class="display:flex;justify-content:center;align-items:center;" onclick="displayPDF(\'http://localhost:8080' + data.cvUrl + '\')" ><img width="30" height="30" src="https://img.icons8.com/3d-fluency/30/pdf.png" alt="pdf"/></div></td>' +
                 '<td>' + data.applyDate + '</td>' +
-                '<td>' +
+                '<td >' +
                 '<button class="accept-btn" onclick="modifyApplication(' + data.id + ', \'ACCEPTED\')">Accept</button>' +
                 '<button class="reject-btn" onclick="modifyApplication(' + data.id + ', \'REJECTED\')">Reject</button>' +
                 '</td>' +
@@ -211,4 +159,39 @@
         $('#applicantEmail').val('');
         $('#offerIdAply').val('');
     }
+
+    async function displayPDF(pdfUrl) {
+        // Set the worker source
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.worker.min.js';
+
+        // Correct the PDF URL by replacing spaces with %20
+        const correctedUrl = pdfUrl.replace(/ /g, '%20');
+
+        console.log(correctedUrl);
+
+        const loadingTask = pdfjsLib.getDocument(correctedUrl); // Use the corrected URL directly
+
+        try {
+            const pdf = await loadingTask.promise;
+            const page = await pdf.getPage(1); // Display the first page of the PDF
+            const scale = 1.5; // Scale the PDF for better visibility
+            const viewport = page.getViewport({ scale: scale });
+
+            const canvas = document.getElementById('pdfCanvas');
+            const context = canvas.getContext('2d');
+            canvas.height = viewport.height;
+            canvas.width = viewport.width;
+
+            const renderContext = {
+                canvasContext: context,
+                viewport: viewport
+            };
+            await page.render(renderContext).promise; // Render the PDF page to the canvas
+        } catch (error) {
+            console.error('Error loading PDF:', error);
+        }
+    }
+
+
+
 </script>

@@ -142,9 +142,12 @@ public class OffreController extends HttpServlet {
                 .registerTypeAdapter(LocalDate.class, new LocalDateAdapter()) // Register the custom LocalDate adapter
                 .create();
 
-        String idStr = request.getParameter("id");
+
+        String idStr = request.getParameter("senderid");
+
 
         if (idStr == null || idStr.trim().isEmpty()) {
+            // Fetch all offers if senderid is not provided (this should not happen due to the filter)
             List<Offre> offres = offreDAO.fetchAll();
             List<Map<String, Object>> offresWithRhDetails = new ArrayList<>();
 
@@ -172,27 +175,12 @@ public class OffreController extends HttpServlet {
 
         } else {
             try {
-                int id = Integer.parseInt(idStr);
-                Offre offre = offreDAO.findById((long) id);
-
-                if (offre != null) {
-                    Rh rh = RhDAO.findById((long) offre.getCreatorid());
-
-                    // Create a map to hold Offre details and RH details
-                    Map<String, Object> offreWithRh = new HashMap<>();
-                    offreWithRh.put("offre", offre); // Add the Offre object itself
-
-                    // If RH details are available, add them to the map
-                    if (rh != null) {
-                        offreWithRh.put("rhName", rh.getName());
-                        offreWithRh.put("rhEmail", rh.getEmail());
-                        offreWithRh.put("rhPhone", rh.getPhoneNumber());
-                    }
-
-                    // Convert single offer with RH details to JSON
-                    String jsonResponse = gson.toJson(offreWithRh);
+                // Fetch offers filtered by creatorid
+                List<Offre> offres = offreDAO.fetchWhere("Creatorid", idStr);
+                if (!offres.isEmpty()) {
+                    // Convert list of offers with RH details to JSON
+                    String jsonResponse = gson.toJson(offres);
                     ResponseHandler.sendResponse(response, jsonResponse, HttpServletResponse.SC_OK);
-
                 } else {
                     ResponseHandler.sendResponse(response, "{\"message\": \"Offre not found.\"}", HttpServletResponse.SC_NOT_FOUND);
                 }
@@ -201,6 +189,7 @@ public class OffreController extends HttpServlet {
             }
         }
     }
+
 
 
 }

@@ -2,48 +2,83 @@ package GE.controller;
 
 import GE.DAO.EmployeeDAO;
 //import GE.model.Employee;
+import GE.model.Aplyment;
+import GE.model.Employee;
+import GE.model.Offre;
 import com.google.gson.Gson;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+
+import java.io.*;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 
 import java.io.IOException;
 import java.util.List;
 @WebServlet(urlPatterns = {
-        "/addEmployee",
+
         "/GetEmployee",
-        "/DelEmployee/*",
-        "/ModifyEmployee/*",
+
 })
 public class EmployeeController extends HttpServlet {
 //    private final EmployeeDAO employeeDAO = new EmployeeDAO();
 //
-//    @Override
-//    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-//            throws ServletException, IOException {
-//
-//        // Fetch all employees from the database
-//        List<Employee> employees = employeeDAO.fetchAllEmployees();
-//
-//        if (employees != null) {
-//            // Set the employee list as a request attribute
-//            request.setAttribute("employees", employees);
-//
-//
-//            request.getRequestDispatcher("Home.jsp").forward(request, response);
-//        } else {
-//            // Handle case where no employees are found
-//            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-//            response.getWriter().write("No employees found.");
-//        }
-//    }
+EmployeeDAO<Employee> offreDAO = new EmployeeDAO<>(Employee.class);
+
+@Override
+public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    request.setCharacterEncoding("UTF-8");
+    response.setContentType("application/json");
+    response.setCharacterEncoding("UTF-8");
+
+    try {
+
+
+
+
+        List<Employee> Employees = offreDAO.fetchAll();
+
+        System.out.println(Employees);
+
+        // Manually create JSON response
+        StringBuilder jsonResponse = new StringBuilder("[");
+        for (int i = 0; i < Employees.size(); i++) {
+            Employee Employeecustum = Employees.get(i);
+
+            jsonResponse.append("{")
+                    .append("\"id\":").append(Employeecustum.getId() != null ? Employeecustum.getId() : "N/A").append(",")
+                    .append("\"EmployeeName\":").append(Employeecustum.getName() != null ? "\"" + Employeecustum.getName() + "\"" : "\"N/A\"").append(",")
+                    .append("\"email\":\"").append(Employeecustum.getEmail() != null ? Employeecustum.getEmail() : "N/A").append("\",")
+                    .append("\"Childs\":\"").append("1").append("\",") // Assuming static value here, adjust as needed
+                    .append("\"AbscenceDays\":\"").append(Employeecustum.getAbscenceDays() != null ? Employeecustum.getAbscenceDays() : "0").append("\",")
+                    .append("\"CongeDays\":\"").append(Employeecustum.getCongeDays() != null ? Employeecustum.getCongeDays() : "0").append("\",")
+                    .append("\"TotalSalary\":\"").append("100").append("\"") // Assuming static value here, adjust as needed
+                    .append("}");
+
+
+            if (i < Employees.size() - 1) {
+                jsonResponse.append(",");
+            }
+        }
+        jsonResponse.append("]");
+
+
+        response.getWriter().write(jsonResponse.toString());
+
+
+        response.setStatus(HttpServletResponse.SC_OK);
+    } catch (Exception e) {
+
+        e.printStackTrace();
+
+        // Send an error response with status 500 (Internal Server Error)
+        response.getWriter().write("{\"error\": \"Internal Server Error. Unable to process the request.\"}");
+        response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+    }
+}
 
 //
 //
