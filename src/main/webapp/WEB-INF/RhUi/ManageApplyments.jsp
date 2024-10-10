@@ -7,7 +7,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
-<div onclick="getApplications()">refreach</div>
+<div style="cursor: pointer; margin: 0 40px " onclick="getApplications()"><img width="48" height="48" src="https://img.icons8.com/pulsar-gradient/48/available-updates.png" alt="available-updates"/></div>
 <section class="container">
 
 
@@ -141,7 +141,7 @@
                 '<td>' + data.name + '</td>' +
                 '<td>' + data.email + '</td>' +
                 '<td>' + data.Letter + '</td>' +
-                '<td> <div class="display:flex;justify-content:center;align-items:center;" onclick="displayPDF(\'http://localhost:8080' + data.cvUrl + '\')" ><img width="30" height="30" src="https://img.icons8.com/3d-fluency/30/pdf.png" alt="pdf"/></div></td>' +
+                '<td> <div class="display:flex;justify-content:center;align-items:center;" onclick="downloadpdf(\'http://localhost:8080' + data.cvUrl + '\')" ><img width="30" height="30" src="https://img.icons8.com/3d-fluency/30/pdf.png" alt="pdf"/></div></td>' +
                 '<td>' + data.applyDate + '</td>' +
                 '<td >' +
                 '<button class="accept-btn" onclick="modifyApplication(' + data.id + ', \'ACCEPTED\')">Accept</button>' +
@@ -160,35 +160,30 @@
         $('#offerIdAply').val('');
     }
 
-    async function displayPDF(pdfUrl) {
-        // Set the worker source
-        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.worker.min.js';
-
-        // Correct the PDF URL by replacing spaces with %20
-        const correctedUrl = pdfUrl.replace(/ /g, '%20');
-
-        console.log(correctedUrl);
-
-        const loadingTask = pdfjsLib.getDocument(correctedUrl); // Use the corrected URL directly
-
+    async function downloadpdf(pdfUrl) {
         try {
-            const pdf = await loadingTask.promise;
-            const page = await pdf.getPage(1); // Display the first page of the PDF
-            const scale = 1.5; // Scale the PDF for better visibility
-            const viewport = page.getViewport({ scale: scale });
+            // Fetch the PDF from the server
+            const response = await fetch(pdfUrl);
 
-            const canvas = document.getElementById('pdfCanvas');
-            const context = canvas.getContext('2d');
-            canvas.height = viewport.height;
-            canvas.width = viewport.width;
+            // Check if the response is ok (status code 200)
+            if (!response.ok) {
+                throw new Error('Failed to download PDF');
+            }
 
-            const renderContext = {
-                canvasContext: context,
-                viewport: viewport
-            };
-            await page.render(renderContext).promise; // Render the PDF page to the canvas
+            // Get the response as a blob
+            const blob = await response.blob();
+
+            // Create a link element, set the download attribute, and trigger a click to download
+            const link = document.createElement('a');
+            link.href = window.URL.createObjectURL(blob);
+            link.download = pdfUrl.split('/').pop(); // Use the PDF filename for download
+            link.click();
+
+            // Clean up by revoking the object URL after download
+            window.URL.revokeObjectURL(link.href);
         } catch (error) {
-            console.error('Error loading PDF:', error);
+            console.error('Error downloading PDF:', error);
+            alert('An error occurred while downloading the PDF.');
         }
     }
 

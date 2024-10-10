@@ -2,16 +2,19 @@ package GE.controller;
 
 import GE.DAO.EmployeeDAO;
 import GE.model.Employee;
+import GE.model.Logs;
 import GE.model.Rh;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import utils.Mailling;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.security.SecureRandom;
+import java.util.Date;
 import java.util.Random;
 @WebServlet(urlPatterns = {
         "/",
@@ -31,6 +34,7 @@ public class AuthController extends HttpServlet {
 
     EmployeeDAO<Rh> rhDAO = new EmployeeDAO<>(Rh.class);
     EmployeeDAO<Employee> EmployeeDAO = new EmployeeDAO<>(Employee.class);
+    EmployeeDAO<Logs> LogsDAO = new EmployeeDAO<>(Logs.class);
 
     public int register(String email, String name,String Type) {
 
@@ -43,6 +47,8 @@ public class AuthController extends HttpServlet {
             newEmployee.setEmail(email);
             newEmployee.setName(name);
             newEmployee.setPassword(password);
+            newEmployee.setSalaire(6000);
+            newEmployee.setChildsnmbr(0);
 
             try {
                 EmployeeDAO.save(newEmployee);
@@ -54,6 +60,12 @@ public class AuthController extends HttpServlet {
             }
 
 
+            Logs log = new Logs();
+            log.setType("AddEmployee");
+            log.setDescription("New employee registered: " + name);
+            log.setDate(new Date());
+            LogsDAO.save(log);
+
         }else if(Type.equals("Rh")){
 
 
@@ -61,7 +73,7 @@ public class AuthController extends HttpServlet {
             newRh.setEmail(email);
             newRh.setName(name);
             newRh.setPassword(password);
-
+            newRh.setSalaire(8000);
             try {
                 rhDAO.save(newRh);
                 System.out.println("imaaad Rh employee registered successfully.");
@@ -70,8 +82,16 @@ public class AuthController extends HttpServlet {
                 e.printStackTrace();
                 return -1;
             }
+            Logs log = new Logs();
+            log.setType("AddRh");
+            log.setDescription("New Rh registered: " + name);
+            log.setDate(new Date());
+            LogsDAO.save(log);
         }
 
+        Mailling.sendMail(email,"Welkome your password is : " + password);
+
+        LogsDAO.save(new Logs());
         return 0;
     }
 

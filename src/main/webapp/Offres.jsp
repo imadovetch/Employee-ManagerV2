@@ -1,13 +1,16 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<html>
+<html id="htmlloader">
 <head>
     <title>Title</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body style="display: flex; flex-direction: column;" class="light">
 <div style="height: 10% ; width: 100%; display: flex; justify-content: end; align-items: center ">
+    <div onclick="ShowLoginFrom()" style="width: 10px; height: 40px ; background-color: #4CAF50">
+
+    </div>
     <div style="display: flex ; justify-content: space-around ; align-items: center ; width: 60%; margin-left: auto;">
 
         <input placeholder="Searth the internet..." type="text" name="text" class="searchinput">
@@ -22,7 +25,22 @@
         <span class="slider"></span>
     </label>
 </div>
-<div   style="height: 90% ; width: 90%; margin: auto; display: flex;  justify-content: space-around;  align-items: center; " >
+<div   style=" height: 90% ; width: 90%; margin: auto; display: flex;  justify-content: space-around;  align-items: center;  " >
+
+    <div class="wrapper">
+
+        <div class="flip-card__front">
+            <div class="title">Log in</div>
+            <div class="flip-card__form" action="">
+                <input class="flip-card__input" id="emailloging"  placeholder="Email" type="email">
+                <input class="flip-card__input" id="passwordloging" placeholder="Password" type="password">
+                <button onclick="loginfun()" class="flip-card__btn">Let`s go!</button>
+            </div>
+        </div>
+
+    </div>
+
+
 
     <div style="overflow-y:auto;width: 50%; height: 90%; margin: auto; background-color: var(--one-color); border: 5px; border-radius: 15px  0  0 15px; border-right: 7px solid #494949;"  id="Offres"  >
     </div>
@@ -62,6 +80,10 @@
     @keyframes fadeIn {
         from { opacity: 0; }
         to { opacity: 1; }
+    }
+    @keyframes transition {
+        from { transform: translateX(-100%); }
+        to { transform: translateX(0); }
     }
 
     :root {
@@ -237,6 +259,125 @@
     .searchinput:focus {
         border: 2px solid grey;
     }
+
+
+
+
+
+
+    .wrapper {
+        position: absolute;
+        top: 20%;
+        left: 1%;
+        --input-focus: #2d8cf0;
+        --font-color: #323232;
+        --font-color-sub: #666;
+        --bg-color: #fff;
+        --bg-color-alt: #666;
+        --main-color: #323232;
+        animation: transition 0.5s; /* Add a fade-in effect for the form */
+
+    }
+
+    /* card */
+
+    .flip-card__inner {
+        width: 300px;
+        height: 350px;
+        position: relative;
+        background-color: transparent;
+        perspective: 1000px;
+        /* width: 100%;
+        height: 100%; */
+        text-align: center;
+        transition: transform 0.8s;
+        transform-style: preserve-3d;
+    }
+
+    .toggle:checked ~ .flip-card__inner {
+        transform: rotateY(180deg);
+    }
+
+    .toggle:checked ~ .flip-card__front {
+        box-shadow: none;
+    }
+
+    .flip-card__front, .flip-card__back {
+        padding: 20px;
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+        background: lightgrey;
+        gap: 20px;
+        border-radius: 5px;
+        border: 2px solid var(--main-color);
+        box-shadow: 4px 4px var(--main-color);
+    }
+
+    .flip-card__back {
+        width: 100%;
+        transform: rotateY(180deg);
+    }
+
+    .flip-card__form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .title {
+        margin: 20px 0 20px 0;
+        font-size: 25px;
+        font-weight: 900;
+        text-align: center;
+        color: var(--main-color);
+    }
+
+    .flip-card__input {
+        width: 250px;
+        height: 40px;
+        border-radius: 5px;
+        border: 2px solid var(--main-color);
+        background-color: var(--bg-color);
+        box-shadow: 4px 4px var(--main-color);
+        font-size: 15px;
+        font-weight: 600;
+        color: var(--font-color);
+        padding: 5px 10px;
+        outline: none;
+    }
+
+    .flip-card__input::placeholder {
+        color: var(--font-color-sub);
+        opacity: 0.8;
+    }
+
+    .flip-card__input:focus {
+        border: 2px solid var(--input-focus);
+    }
+
+    .flip-card__btn:active, .button-confirm:active {
+        box-shadow: 0px 0px var(--main-color);
+        transform: translate(3px, 3px);
+    }
+
+    .flip-card__btn {
+        margin: 20px 0 20px 0;
+        width: 120px;
+        height: 40px;
+        border-radius: 5px;
+        border: 2px solid var(--main-color);
+        background-color: var(--bg-color);
+        box-shadow: 4px 4px var(--main-color);
+        font-size: 17px;
+        font-weight: 600;
+        color: var(--font-color);
+        cursor: pointer;
+    }
 </style>
 <script>
     var OffresForpage = getOffers();
@@ -255,6 +396,31 @@
             }
         });
 
+    }
+
+    function loginfun() {
+
+        const email = document.getElementById('emailloging').value;
+        const pass = document.getElementById('passwordloging').value;
+
+        $.ajax({
+            type: 'POST',
+            url: 'login',
+            data: { email: email, password: pass }, // Use 'data' instead of 'body'
+            success: function(response) {
+                console.log('Login successful!', response);
+                localStorage.setItem("id",response.id)
+                if(response.type === "Rh"){
+                    window.location.href = "Rh.jsp"
+                }else if(response.type === "Employee"){
+                    window.location.href = "Employee.jsp"
+                }
+            },
+            error: function(error) {
+                console.error('Error during login:', error);
+                // Handle error (e.g., show an error message to the user)
+            }
+        });
     }
 
     function displayOffers(offers) {
@@ -391,4 +557,14 @@
 
         console.log("Theme set to: " + coler);
     });
+
+
+
+
+
+    function  ShowLoginFrom(){
+        $(".wrapper").toggleClass("Hidden");
+
+    }
+
 </script>

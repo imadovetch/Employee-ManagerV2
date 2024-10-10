@@ -198,4 +198,24 @@ public class EmployeeDAO<T> {
         return entity;
     }
 
+    public int count() {
+        EntityManager entityManager = null;
+        int count = 0;
+
+        try {
+            entityManager = entityManagerFactory.createEntityManager();
+            String queryString = "SELECT COUNT(e) FROM " + entityClass.getSimpleName() + " e";
+            TypedQuery<Long> query = entityManager.createQuery(queryString, Long.class);
+            count = query.getSingleResult().intValue();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (entityManager != null) {
+                entityManager.close();
+            }
+        }
+
+        return count;
+    }
+
 }

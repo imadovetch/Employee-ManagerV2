@@ -12,6 +12,17 @@ public class Employee extends User {
     private String position;
 
     @Column(nullable = true)
+    private int Childsnmbr;
+
+    public int getChildsnmbr() {
+        return Childsnmbr;
+    }
+
+    public void setChildsnmbr(int childsnmbr) {
+        Childsnmbr = childsnmbr;
+    }
+
+    @Column(nullable = true)
     private String department;
 
     // Default constructor

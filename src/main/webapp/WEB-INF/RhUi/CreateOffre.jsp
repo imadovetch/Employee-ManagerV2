@@ -44,8 +44,11 @@
 <!-- Existing table and other content -->
 
 <section class="container">
-    <div onclick="getOffers()">update</div>
-    <button id="toggleFormBtn">Show Form</button>
+    <div style="display: flex; align-items: center; gap: 20px ;">
+        <div style="cursor: pointer;" onclick="getOffers()"><img width="48" height="48" src="https://img.icons8.com/pulsar-gradient/48/available-updates.png" alt="available-updates"/></div>
+        <button id="toggleFormBtn">Show Form</button>
+    </div>
+
     <table class="Offres-table">
         <thead>
         <tr>

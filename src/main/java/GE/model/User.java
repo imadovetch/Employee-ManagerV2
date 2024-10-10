@@ -125,6 +125,22 @@ public class User {
         return phoneNumber;
     }
 
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", salaire=" + salaire +
+                ", abscenceDays=" + abscenceDays +
+                ", congeDays=" + congeDays +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", birthDate=" + birthDate +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", adresse='" + adresse + '\'' +
+                '}';
+    }
+
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
