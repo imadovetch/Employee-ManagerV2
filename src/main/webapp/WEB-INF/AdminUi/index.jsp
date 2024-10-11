@@ -15,9 +15,9 @@
     <div id="create" class="Hidden">
         <jsp:include page="/WEB-INF/AdminUi/Conge&Absence.jsp" />
     </div>
-    <div id="manage" class="Hidden">
-        <jsp:include page="/WEB-INF/AdminUi/ManageEnployee.jsp" />
-    </div>
+<%--    <div id="manage" class="Hidden">--%>
+<%--        <jsp:include page="/WEB-INF/AdminUi/ManageEnployee.jsp" />--%>
+<%--    </div>--%>
     <div id="monitoring" class="Hidden">
         <jsp:include page="/WEB-INF/AdminUi/Logs.jsp" />
     </div>
@@ -31,7 +31,7 @@
         top: 0;
         left: 0;
         width: 100%;
-        background-color: #f2f2f2;
+
         padding: 10px;
         display: flex;
         gap: 20px;
@@ -45,9 +45,7 @@
     .content-section {
         width: 100%;
         height: 100%;
-        background-color: #007bff;
-        margin-top: 50px;
-        padding: 20px;
+
     }
     .Hidden {
         display: none;
@@ -74,3 +72,5 @@
         }
     }
 </script>
+
+
