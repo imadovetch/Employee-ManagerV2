@@ -22,7 +22,7 @@ public class Mailling {
         properties.put("mail.smtp.auth", "true"); // Enable authentication
 
         // Get the Session object and authenticate
-        Session session = Session.getInstance(properties, new jakarta.mail.Authenticator() {
+        Session session = Session.getInstance(properties, new Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {
                 return new PasswordAuthentication("ibouderoua63@gmail.com", "ogdwpnrmuteilnyl"); // App-specific password
             }

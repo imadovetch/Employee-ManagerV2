@@ -43,6 +43,10 @@ public class AplymentController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
+        List<Aplyment> check = aplymentDAO.fetchWhere("email", request.getParameter("email"));
+        if (check.size() > 0) {
+            ResponseHandler.sendResponse(response, "Already exist", HttpServletResponse.SC_CREATED);
+        }
 
         try {
             // Get the file part (cv)

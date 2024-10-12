@@ -17,6 +17,7 @@ import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 @WebServlet(urlPatterns = {
 
@@ -29,7 +30,7 @@ public class CongeController extends HttpServlet {
     EmployeeDAO<User> offreDAO = new EmployeeDAO<>(User.class);
     EmployeeDAO<Rh> RhDAO = new EmployeeDAO<>(Rh.class);
     EmployeeDAO<Offre> offrerDAO = new EmployeeDAO<>(Offre.class);
-    EmployeeDAO<Logs> AplymentDAO = new EmployeeDAO<>(Logs.class);
+    EmployeeDAO<Logs> LogsDAO = new EmployeeDAO<>(Logs.class);
 
 
     @Override
@@ -60,6 +61,11 @@ public class CongeController extends HttpServlet {
 
             // Update the employee in the database
             boolean updateSuccess = offreDAO.update(emp, emp.getId());
+            Logs log = new Logs();
+            log.setType("Conge");
+            log.setDescription("Conge booked for id : : " + id);
+            log.setDate(new Date());
+            LogsDAO.save(log);
             if (updateSuccess) {
                 ResponseHandler.sendResponse(response, "Conge days incremented successfully", HttpServletResponse.SC_OK);
             } else {

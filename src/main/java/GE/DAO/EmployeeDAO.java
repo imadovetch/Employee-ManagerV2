@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 
 import java.util.List;
 
-public class EmployeeDAO<T> {
+public class EmployeeDAO<T> implements IEmployeeDAO<T> {
 
     private Class<T> entityClass;
     private EntityManagerFactory entityManagerFactory;

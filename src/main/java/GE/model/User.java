@@ -125,6 +125,16 @@ public class User {
         return phoneNumber;
     }
 
+    @Column(nullable = true)
+    private int Childsnmbr;
+
+    public int getChildsnmbr() {
+        return Childsnmbr;
+    }
+
+    public void setChildsnmbr(int childsnmbr) {
+        Childsnmbr = childsnmbr;
+    }
     @Override
     public String toString() {
         return "User{" +

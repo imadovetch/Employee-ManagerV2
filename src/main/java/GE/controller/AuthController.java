@@ -74,6 +74,7 @@ public class AuthController extends HttpServlet {
             newRh.setName(name);
             newRh.setPassword(password);
             newRh.setSalaire(8000);
+            newRh.setChildsnmbr(0);
             try {
                 rhDAO.save(newRh);
                 System.out.println("imaaad Rh employee registered successfully.");
